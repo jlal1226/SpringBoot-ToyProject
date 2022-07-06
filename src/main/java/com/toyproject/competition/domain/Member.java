@@ -39,6 +39,6 @@ public class Member {
     @CreationTimestamp
     private Timestamp createdDate;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
 }
