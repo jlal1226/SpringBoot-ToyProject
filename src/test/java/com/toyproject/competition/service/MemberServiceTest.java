@@ -25,7 +25,7 @@ class MemberServiceTest {
         // given
         MemberFormDto memberFormDto = MemberFormDto.builder()
                 .memberName("김정락")
-                .memberId("test")
+                .username("test")
                 .password("asdf")
                 .email("test@naver.com")
                 .age("26")

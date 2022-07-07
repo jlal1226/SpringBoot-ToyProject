@@ -24,7 +24,7 @@ public class Member {
     private String name;
 
     @Column(unique = true)
-    private String uid;
+    private String username;
 
     private String password;
 

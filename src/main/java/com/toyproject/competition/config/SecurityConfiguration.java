@@ -15,13 +15,22 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                        .anyRequest().permitAll();
+                .antMatchers("/post/**").authenticated()
+                .antMatchers("/comment/**").authenticated()
+                .anyRequest().permitAll();
         http
                 .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
+                .loginPage("/loginForm")
+                .loginProcessingUrl("/login") // login 주소가 호출되면 시큐리티가 대신 진행
                 .defaultSuccessUrl("/")
-                .failureUrl("/login");
+                .failureUrl("/loginForm");
+
+        http
+                .logout()
+                .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessUrl("/");
+
 
         return http.build();
     }

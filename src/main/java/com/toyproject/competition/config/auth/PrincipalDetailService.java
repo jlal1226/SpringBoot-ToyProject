@@ -1,5 +1,6 @@
 package com.toyproject.competition.config.auth;
 
+import com.toyproject.competition.domain.Member;
 import com.toyproject.competition.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,10 @@ public class PrincipalDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member memberEntity = memberRepository.findByUsername(username);
+        if (memberEntity != null) {
+            return new PrincipalDetails(memberEntity);
+        }
         return null;
     }
 }

@@ -3,18 +3,14 @@ package com.toyproject.competition.service;
 import com.toyproject.competition.domain.Member;
 import com.toyproject.competition.dto.MemberFormDto;
 import com.toyproject.competition.repository.MemberRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -37,9 +33,10 @@ public class MemberService {
         // 엔티티 생성
         Member member = Member.builder()
                 .name(memberFormDto.getMemberName())
-                .uid(memberFormDto.getMemberId())
+                .username(memberFormDto.getUsername())
                 .password(encodedPassword)
                 .age(Integer.parseInt(memberFormDto.getAge()))
+                .role("ROLE_USER")
                 .build();
 
         memberRepository.save(member);

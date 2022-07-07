@@ -54,19 +54,13 @@ public class MemberController {
      * 로그인
      */
     @GetMapping("/loginForm")
-    public String loginForm() {
-        return "loginForm";
-    }
-
-    @GetMapping("/login")
-    public String login(Model model) {
+    public String loginForm(Model model) {
         model.addAttribute("loginForm", new LoginFormDto());
         return "loginForm";
     }
 
-    @PostMapping("/login")
-    public String login(LoginFormDto loginFormDto) {
-
-        return "redirect:/";
+    @GetMapping("login")
+    public String login() {
+        return "loginForm";
     }
 }
