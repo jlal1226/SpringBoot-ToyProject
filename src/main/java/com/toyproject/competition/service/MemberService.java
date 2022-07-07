@@ -61,7 +61,10 @@ public class MemberService {
     }
 
     /**
-     * 로그인
+     * 회원 조회
      */
+    public Member findMember(String username) {
+        return memberRepository.findByUsername(username);
+    }
 
 }

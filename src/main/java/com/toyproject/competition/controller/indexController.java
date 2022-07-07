@@ -16,4 +16,9 @@ public class indexController {
     public String test() {
         return "pages/test";
     }
+
+    @GetMapping("/swiperTest")
+    public String swiperTest() {
+        return "swiperTest";
+    }
 }

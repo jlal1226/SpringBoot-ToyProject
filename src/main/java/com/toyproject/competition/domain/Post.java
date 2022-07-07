@@ -41,5 +41,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
-
+    //== 연관 관계 ==//
+    public void setMember(Member member) {
+        this.member = member;
+        member.getPostList().add(this);
+    }
 }
