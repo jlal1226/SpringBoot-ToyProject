@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/defaultLayout}">
+
+
+<div class="container" layout:fragment="content">
+    <h1>게시판</h1>
+    <table class="table table-hover table-bordered">
+        <thead>
+        <th>글번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        </thead>
+        <tr th:each="list :${list}">
+            <td>[[${list.postId}]]</td>
+            <td>[[${list.title}]]</td>
+            <td>[[${list.username}]]</td>
+        </tr>
+    </table>
+    <button type="button" class="btn btn-primary" onClick="location.href='write'">글쓰기</button>
+</div>
+</html>
