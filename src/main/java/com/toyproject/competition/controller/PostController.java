@@ -56,4 +56,14 @@ public class PostController {
 
         return "redirect:/post/list";
     }
+
+    // 게시글 상세 내용
+    @GetMapping("/view")
+    public String postView(Model model, @RequestParam(value = "id", required = false) Long id) {
+        if (id == null) {
+            return "redirect:/post/list";
+        }
+        model.addAttribute("post", postService.getPostView(id));
+        return "pages/postView";
+    }
 }

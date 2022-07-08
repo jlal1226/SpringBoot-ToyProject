@@ -4,6 +4,7 @@ import com.toyproject.competition.domain.Member;
 import com.toyproject.competition.domain.Post;
 import com.toyproject.competition.dto.PostDto;
 import com.toyproject.competition.dto.PostResponseDto;
+import com.toyproject.competition.dto.PostViewResponseDto;
 import com.toyproject.competition.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -14,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -69,8 +67,33 @@ public class PostService {
     }
 
     /**
-     * 게시글 내용 조회
+     * 게시글 상세 내용 조회
      */
+    public PostViewResponseDto getPostView(Long id) {
+        Optional<Post> post = postRepository.findById(id);
+        PostViewResponseDto dto = null;
+        if (post.isPresent()) {
+            dto = PostViewResponseDto.builder()
+                    .title(post.get().getTitle())
+                    .content(post.get().getContent())
+                    .username(post.get().getMember().getUsername())
+                    .date(post.get().getModifiedDate())
+                    .build();
+        } else {
+            dto = getPostViewResponseDto();
+        }
+        return dto;
+    }
+
+    public PostViewResponseDto getPostViewResponseDto() {
+        PostViewResponseDto dto = PostViewResponseDto.builder()
+                .title("title error")
+                .content("content error")
+                .username("no username")
+                .build();
+
+        return dto;
+    }
 
     /**
      * 게시글 수정
@@ -80,6 +103,9 @@ public class PostService {
      * 게시글 삭제
      */
 
+    /**
+     * 유효성 처리 메서드
+     */
     public Map<String, String> validateHandling(BindingResult bindingResult) {
         Map<String, String> validatorResult = new HashMap<>();
 

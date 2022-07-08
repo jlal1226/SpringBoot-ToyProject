@@ -11,7 +11,7 @@
         <th>제목</th>
         <th>작성자</th>
         </thead>
-        <tr th:each="list :${list}">
+        <tr th:each="list :${list}" th:onclick="|location.href='@{/post/view(id=${list.postId})}'|">
             <td>[[${list.postId}]]</td>
             <td>[[${list.title}]]</td>
             <td>[[${list.username}]]</td>
