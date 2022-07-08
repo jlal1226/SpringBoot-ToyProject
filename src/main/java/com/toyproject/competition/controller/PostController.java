@@ -66,4 +66,18 @@ public class PostController {
         model.addAttribute("post", postService.getPostView(id));
         return "pages/postView";
     }
+
+    // 게시글 수정
+    @GetMapping("/update")
+    public String updatePostView(@RequestParam(value = "id", required = false) Long id) {
+
+        return "";
+    }
+
+    // 게시글 삭제
+    @GetMapping("/delete")
+    public String deletePost(@RequestParam(value = "id", required = false) Long id) {
+        postService.deletePost(id);
+        return "redirect:/list";
+    }
 }

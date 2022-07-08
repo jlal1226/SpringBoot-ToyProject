@@ -98,10 +98,16 @@ public class PostService {
     /**
      * 게시글 수정
      */
+    public void updatePost(Long id) {
+
+    }
 
     /**
      * 게시글 삭제
      */
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
+    }
 
     /**
      * 유효성 처리 메서드
