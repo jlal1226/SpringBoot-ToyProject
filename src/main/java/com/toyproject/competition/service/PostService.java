@@ -1,7 +1,9 @@
 package com.toyproject.competition.service;
 
+import com.toyproject.competition.domain.Comment;
 import com.toyproject.competition.domain.Member;
 import com.toyproject.competition.domain.Post;
+import com.toyproject.competition.dto.CommentResponseDto;
 import com.toyproject.competition.dto.PostDto;
 import com.toyproject.competition.dto.PostResponseDto;
 import com.toyproject.competition.dto.PostViewResponseDto;
@@ -24,7 +26,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberService memberService;
-    private Authentication authentication;
 
     /**
      * 게시글 등록
@@ -74,6 +75,7 @@ public class PostService {
         PostViewResponseDto dto = null;
         if (post.isPresent()) {
             dto = PostViewResponseDto.builder()
+                    .id(post.get().getId())
                     .title(post.get().getTitle())
                     .content(post.get().getContent())
                     .username(post.get().getMember().getUsername())
@@ -98,15 +100,44 @@ public class PostService {
     /**
      * 게시글 수정
      */
-    public void updatePost(Long id) {
-
+    @Transactional
+    public void updatePost(Long id, PostDto postDto) {
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()) {
+            Post postEntity = post.get();
+            postEntity.updatePost(postDto.getTitle(), postDto.getContent());
+            postRepository.save(postEntity);
+        } else {
+            System.out.println("post update error");
+        }
     }
 
     /**
      * 게시글 삭제
      */
+    @Transactional
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+
+    /**
+     * 댓글 조회
+     */
+    public List<CommentResponseDto> getComment(Long id) {
+        Post post = postRepository.findById(id).get();
+        List<Comment> commentList = post.getCommentList();
+
+        List<CommentResponseDto> dtoList = new ArrayList<>();
+        for (Comment comment : commentList) {
+            CommentResponseDto dto = CommentResponseDto.builder()
+                    .comment(comment.getComment())
+                    .date(comment.getModifiedDate())
+                    .username(comment.getMember().getUsername())
+                    .build();
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 
     /**

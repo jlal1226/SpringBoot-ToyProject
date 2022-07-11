@@ -38,4 +38,15 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    //== 연관 관계 메소드 ==//
+    public void setPost(Post post) {
+        this.post = post;
+        post.getCommentList().add(this);
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getCommentList().add(this);
+    }
 }

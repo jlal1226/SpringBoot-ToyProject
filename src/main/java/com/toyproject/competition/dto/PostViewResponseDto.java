@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Builder
 public class PostViewResponseDto {
+    private Long id;
     private String username;
     private Timestamp date;
     private String title;

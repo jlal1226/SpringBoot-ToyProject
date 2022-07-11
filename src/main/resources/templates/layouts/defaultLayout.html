@@ -5,20 +5,20 @@
 <head th:replace="fragments/config :: configFragment"></head>
 
 <body class="d-flex flex-column min-vh-100">
+<div id="wrap">
     <!-- header fragment 사용 -->
     <th:block th:replace="fragments/header :: headerFragment"></th:block>
     <!-- content fragment 사용 -->
     <th:block layout:fragment="content"></th:block>
-    <!-- footer fragment 사용 -->
-    <th:block th:replace="fragments/footer :: footerFragment"></th:block>
+</div>
+<!-- footer fragment 사용 -->
+<th:block th:replace="fragments/footer :: footerFragment"></th:block>
 </body>
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
 
 <th:block layout:fragment="script"></th:block>
 </html>

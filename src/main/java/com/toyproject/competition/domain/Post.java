@@ -46,4 +46,10 @@ public class Post {
         this.member = member;
         member.getPostList().add(this);
     }
+
+    // == 수정 로직 ==//
+    public void updatePost(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

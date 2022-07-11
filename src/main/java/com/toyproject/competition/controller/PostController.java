@@ -1,7 +1,9 @@
 package com.toyproject.competition.controller;
 
+import com.toyproject.competition.dto.CommentRequestDto;
 import com.toyproject.competition.dto.PostDto;
 import com.toyproject.competition.dto.PostResponseDto;
+import com.toyproject.competition.service.CommentService;
 import com.toyproject.competition.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,13 +21,14 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     // 게시판 목록
     @GetMapping("/list")
     public String postList(Model model) {
         List<PostResponseDto> postList = postService.postList();
         model.addAttribute("list", postList);
-
+        System.out.println("=================================");
         return "pages/post";
     }
 
@@ -59,25 +62,36 @@ public class PostController {
 
     // 게시글 상세 내용
     @GetMapping("/view")
-    public String postView(Model model, @RequestParam(value = "id", required = false) Long id) {
-        if (id == null) {
+    public String postView(Model model, @RequestParam(value = "id", required = false) Long postId) {
+        if (postId == null) {
             return "redirect:/post/list";
         }
-        model.addAttribute("post", postService.getPostView(id));
+        model.addAttribute("post", postService.getPostView(postId));
+        model.addAttribute("commentList", postService.getComment(postId));
+        model.addAttribute("commentRequestDto", new CommentRequestDto());
+
         return "pages/postView";
     }
 
     // 게시글 수정
     @GetMapping("/update")
-    public String updatePostView(@RequestParam(value = "id", required = false) Long id) {
+    public String updatePostView(Model model, @RequestParam(value = "id", required = false) Long id) {
+        model.addAttribute("post", postService.getPostView(id));
+        return "pages/postEdit";
+    }
 
-        return "";
+
+    @PostMapping("/update")
+    public String updatePostView(@RequestParam(value = "id", required = false) Long id, PostDto postDto) {
+        postService.updatePost(id, postDto);
+        return "redirect:/post/list";
     }
 
     // 게시글 삭제
     @GetMapping("/delete")
     public String deletePost(@RequestParam(value = "id", required = false) Long id) {
         postService.deletePost(id);
-        return "redirect:/list";
+        System.out.println(id + " deleted");
+        return "redirect:/post/list";
     }
 }
