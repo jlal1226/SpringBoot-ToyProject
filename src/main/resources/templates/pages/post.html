@@ -6,17 +6,49 @@
 <div class="container" layout:fragment="content">
     <h1>게시판</h1>
     <table class="table table-hover table-bordered">
-        <thead>
+        <thead class="table-dark text-center" >
         <th>글번호</th>
         <th>제목</th>
         <th>작성자</th>
+        <th>작성 날짜</th>
         </thead>
-        <tr th:each="list :${list}" th:onclick="|location.href='@{/post/view(id=${list.postId})}'|">
-            <td>[[${list.postId}]]</td>
-            <td>[[${list.title}]]</td>
-            <td>[[${list.username}]]</td>
+        <tr th:each="list, loop :${paging}" th:onclick="|location.href='@{/post/view(id=${list.id})}'|">
+            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+            <!--<td>[[${list.id}]]</td>-->
+            <td style="width:60%">
+                [[${list.title}]]
+                <span class="text-danger small ms-2"
+                      th:if="${#lists.size(list.commentList) > 0}"
+                      th:text="${#lists.size(list.commentList)}">
+                </span>
+            </td>
+            <td>[[${list.member.username}]]</td>
+            <td>[[${list.createdDate}]]</td>
         </tr>
     </table>
     <button type="button" class="btn btn-primary" onClick="location.href='write'">글쓰기</button>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${paging.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
 </div>
 </html>

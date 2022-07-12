@@ -9,6 +9,8 @@ import com.toyproject.competition.dto.PostResponseDto;
 import com.toyproject.competition.dto.PostViewResponseDto;
 import com.toyproject.competition.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,8 +55,8 @@ public class PostService {
     /**
      * 게시글 전체 조회
      */
-    public List<PostResponseDto> postList() {
-        List<Post> postList = postRepository.findAll();
+    public List<PostResponseDto> postList(Pageable pageable) {
+        Page<Post> postList = postRepository.findAll(pageable);
         List<PostResponseDto> responseDtoList = new ArrayList<>();
         for (Post post : postList) {
             responseDtoList.add(PostResponseDto.builder()

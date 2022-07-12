@@ -4,6 +4,7 @@ import com.toyproject.competition.domain.Comment;
 import com.toyproject.competition.domain.Member;
 import com.toyproject.competition.domain.Post;
 import com.toyproject.competition.dto.CommentRequestDto;
+import com.toyproject.competition.dto.CommentResponseDto;
 import com.toyproject.competition.repository.CommentRepository;
 import com.toyproject.competition.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +53,18 @@ public class CommentService {
     /**
      * 댓글 조회
      */
-    public void getCommentAll() {
-
+    public List<CommentResponseDto> getCommentAll(Long postId) {
+        List<Comment> commentList = commentRepository.findByPostId(postId);
+        List<CommentResponseDto> dtoList = new ArrayList<>();
+        for (Comment comment : commentList) {
+            CommentResponseDto dto = CommentResponseDto.builder()
+                    .comment(comment.getComment())
+                    .date(comment.getModifiedDate())
+                    .username(comment.getMember().getUsername())
+                    .build();
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 
     /**

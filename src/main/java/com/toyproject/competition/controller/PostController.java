@@ -3,9 +3,13 @@ package com.toyproject.competition.controller;
 import com.toyproject.competition.dto.CommentRequestDto;
 import com.toyproject.competition.dto.PostDto;
 import com.toyproject.competition.dto.PostResponseDto;
+import com.toyproject.competition.repository.PostRepository;
 import com.toyproject.competition.service.CommentService;
 import com.toyproject.competition.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,12 +26,14 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final PostRepository postRepository;
 
     // 게시판 목록
     @GetMapping("/list")
-    public String postList(Model model) {
-        List<PostResponseDto> postList = postService.postList();
-        model.addAttribute("list", postList);
+    public String postList(Model model, @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        postService.postList(pageable);
+
+        model.addAttribute("paging", postRepository.findAll(pageable));
         System.out.println("=================================");
         return "pages/post";
     }
@@ -64,12 +70,15 @@ public class PostController {
     @GetMapping("/view")
     public String postView(Model model, @RequestParam(value = "id", required = false) Long postId) {
         if (postId == null) {
-            return "redirect:/post/list";
+            System.out.println("check====================");
+            model.addAttribute("post", postService.getPostView(postId));
+            model.addAttribute("commentRequestDto", new CommentRequestDto());
+            return "pages/postView";
         }
         model.addAttribute("post", postService.getPostView(postId));
         model.addAttribute("commentList", postService.getComment(postId));
         model.addAttribute("commentRequestDto", new CommentRequestDto());
-
+        System.out.println("post controller");
         return "pages/postView";
     }
 
