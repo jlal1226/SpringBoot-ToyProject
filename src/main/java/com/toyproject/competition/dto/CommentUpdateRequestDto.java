@@ -5,15 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentResponseDto {
+public class CommentUpdateRequestDto {
+    private Long postId;
     private Long commentId;
     private String comment;
-    private Timestamp date;
-    private String username;
 }

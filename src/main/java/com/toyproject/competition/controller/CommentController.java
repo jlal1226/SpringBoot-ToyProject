@@ -1,9 +1,7 @@
 package com.toyproject.competition.controller;
 
 import com.toyproject.competition.domain.Comment;
-import com.toyproject.competition.dto.CommentRequestDto;
-import com.toyproject.competition.dto.CommentResponseDto;
-import com.toyproject.competition.dto.PostDto;
+import com.toyproject.competition.dto.*;
 import com.toyproject.competition.service.CommentService;
 import com.toyproject.competition.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -61,4 +59,34 @@ public class CommentController {
         return "redirect:/post/view?id=" + postId;
     }
 
+    // 댓글 수정
+    @GetMapping("/update")
+    public String update(@RequestParam Long id, Model model) {
+        Comment comment = commentService.getComment(id);
+        CommentUpdateRequestDto dto = CommentUpdateRequestDto.builder()
+                .postId(comment.getPost().getId())
+                .commentId(comment.getId())
+                .comment(comment.getComment())
+                .build();
+
+        model.addAttribute("commentForm", dto);
+
+        return "pages/commentForm";
+    }
+
+    @PostMapping("/update")
+    public String updateComment(@RequestParam Long id, CommentUpdateResponseDto dto) {
+        Comment comment = commentService.getComment(id);
+        commentService.updateComment(id, dto.getComment());
+        return "redirect:/post/view?id=" + comment.getPost().getId();
+    }
+
+    // 댓글 삭제
+    @GetMapping("/delete")
+    public String delete(@RequestParam Long id) {
+        Comment comment = commentService.getComment(id);
+        commentService.deleteComment(id);
+        String url = "redirect:/post/view?id=" + comment.getPost().getId();
+        return url;
+    }
 }

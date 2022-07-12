@@ -133,6 +133,7 @@ public class PostService {
         List<CommentResponseDto> dtoList = new ArrayList<>();
         for (Comment comment : commentList) {
             CommentResponseDto dto = CommentResponseDto.builder()
+                    .commentId(comment.getId())
                     .comment(comment.getComment())
                     .date(comment.getModifiedDate())
                     .username(comment.getMember().getUsername())

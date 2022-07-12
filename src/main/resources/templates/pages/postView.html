@@ -59,6 +59,15 @@
                     </div>
                     <div th:value="date">작성일 : [[${comment.date}]]</div>
                     <div th:value="comment" th:text="${comment.comment}"></div>
+                    <div th:with="username=${#authentication.name}" class="my-3">
+                        <button type="button" class="btn btn-primary" th:if="${#strings.equals(post.username, username)}"
+                                th:onclick="|location.href='@{/comment/update(id=${comment.commentId})}'|">수정
+                        </button>
+                        <button type="button" class="btn btn-danger" th:if="${#strings.equals(comment.username, username)}"
+                                th:onclick="|location.href='@{/comment/delete(id=${comment.commentId})}'|">삭제
+                        </button>
+
+                    </div>
                     <hr>
                 </div>
             </div>
