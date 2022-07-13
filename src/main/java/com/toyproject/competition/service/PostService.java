@@ -55,18 +55,8 @@ public class PostService {
     /**
      * 게시글 전체 조회
      */
-    public List<PostResponseDto> postList(Pageable pageable) {
-        Page<Post> postList = postRepository.findAll(pageable);
-        List<PostResponseDto> responseDtoList = new ArrayList<>();
-        for (Post post : postList) {
-            responseDtoList.add(PostResponseDto.builder()
-                    .postId(post.getId())
-                    .title(post.getTitle())
-                    .username(post.getMember().getUsername())
-                    .build()
-            );
-        }
-        return responseDtoList;
+    public Page<Post> getPostList(String kw, Pageable pageable) {
+        return postRepository.findByTitleLike(kw, pageable);
     }
 
     /**

@@ -30,10 +30,10 @@ public class PostController {
 
     // 게시판 목록
     @GetMapping("/list")
-    public String postList(Model model, @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        postService.postList(pageable);
+    public String postList(Model model, @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam(value = "kw", defaultValue = "") String kw) {
 
-        model.addAttribute("paging", postRepository.findAll(pageable));
+        model.addAttribute("paging",postService.getPostList(kw, pageable));
+        model.addAttribute("kw", kw);
         System.out.println("=================================");
         return "pages/post";
     }
